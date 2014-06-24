@@ -8,6 +8,9 @@ noaaGetSites(force = FALSE)
 \arguments{
 \item{force}{should the file be downloaded or use the cached file?}
 }
+\value{
+a data frame of weather stations
+}
 \description{
 Downloads the list of stations, reads it in and cleans the variables
 }

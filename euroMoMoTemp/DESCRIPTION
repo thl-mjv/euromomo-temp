@@ -6,7 +6,8 @@ Version: 1.0
 Date: 2014-06-24
 Author: Mikko J Virtanen, Ajay Oza
 Maintainer: Mikko J Virtanen <mikko.virtanen@thl.fi>
-Description: 
+Description: Download weather data from public sources such as NOAA website and
+    turn these into useable indicators for analysis
 License: GPL 2.0
 LazyLoad: yes
 Suggests:

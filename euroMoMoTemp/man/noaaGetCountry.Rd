@@ -20,7 +20,12 @@ noaaGetCountry(usecountry = "FI", years = 2008:2013, sitesdata = sites,
 
 \item{basepath}{Directory where the data is downloaded (in subdirectory download)}
 
+\item{uplag}{How old files should be updated}
+
 \item{countrycode}{What variable in the sites -file gives the country name}
+}
+\value{
+A data frame with all stations and all years data
 }
 \description{
 Go through all stations in the country by each year and download the data

@@ -15,6 +15,9 @@ noaaMapRegions(sites, map, level = 0, type = c("inarea", "distance",
 
 \item{type}{What kind of match should be returned}
 }
+\value{
+A matched label of the region
+}
 \description{
 Match sites to map areas
 }

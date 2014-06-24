@@ -5,6 +5,7 @@
 ### Lists of sites  : ftp://ftp.ncdc.noaa.gov/pub/data/gsod/ish-history.csv
 ###
 ###
+### TODO: need to move these to rdata somehow
 european.countries<-c("AT", "BE", "BG", "CH", "CY", "CZ", "DE", "DK", "EE", "EL", 
                       "ES", "FI", "FR", "HR", "HU", "IE", "IS", "IT", "LI", "LT", "LU", 
                       "LV", "ME", "MK", "MT", "NL", "NO", "PL", "PT", "RO", "SE", "SI", 
@@ -15,6 +16,7 @@ european.countries<-c("AT", "BE", "BG", "CH", "CY", "CZ", "DE", "DK", "EE", "EL"
 #' All files with pattern defaults-*.dat will be used in alphapetical order. Thus the latter files override the former. So, using
 #' defaults-global.dat and defaults-local.dat the latter will override the former. Also, you can use either .dat or .txt so that .txt overrides .dat
 #'
+#'@export
 loadDefaults<-function() {
   files1<-list.files(patt="^defaults-.*[.]dat$")
   files2<-list.files(patt="^defaults-.*[.]txt$")
@@ -44,6 +46,8 @@ loadDefaults<-function() {
 #' Downloads the list of stations, reads it in and cleans the variables
 #'
 #' @param force should the file be downloaded or use the cached file?
+#' @return a data frame of weather stations
+#' @export
 noaaGetSites<-function(force=FALSE) {
   ## todo (28.10.2013): Fix country codes using Ajay's table (done 28.10.2013)
   ## todo (28.10.2013): calculate the NUTS region for each site (done 06.11.2013)
@@ -76,7 +80,10 @@ noaaGetSites<-function(force=FALSE) {
 #' @param map   ShapeSpatialDataFrame with the regions
 #' @param level Level of area
 #' @param type  What kind of match should be returned
+#' @return A matched label of the region
+#' @export
 noaaMapRegions<-function(sites,map,level=0,type=c("inarea","distance","bestquess")) {
+  require("sp")
   sp<-SpatialPolygons(subset(map,STAT_LEVL_==level)@polygons)
   pcents<-coordinates(sp)
   sites$row<-1:nrow(sites)
@@ -122,6 +129,8 @@ noaaMapRegions<-function(sites,map,level=0,type=c("inarea","distance","bestquess
 #' @param thisy    should this years data be downloaded even if force=FALSE
 #' @param uplag    how old files should be updated, days
 #' @param basepath where the cached files should go
+#' @return a dataframe with single years data from a single station
+#' @export
 noaaGetSiteYear<-function(site,year=2013,force=FALSE,thisy=TRUE,uplag=0,basepath=NULL) {
   file<-paste(site,"-99999-",year,".op.gz",sep="")
   url <-paste("ftp://ftp.ncdc.noaa.gov/pub/data/gsod/",year,"/",file,sep="")
@@ -186,7 +195,10 @@ noaaGetSiteYear<-function(site,year=2013,force=FALSE,thisy=TRUE,uplag=0,basepath
 #' @param force Should the data be downloaded even if it exists in the cache
 #' @param thisy Should this year's potentially incomplete data be downloaded even if it exists in the cache
 #' @param basepath Directory where the data is downloaded (in subdirectory download)
+#' @param uplag How old files should be updated
 #' @param countrycode What variable in the sites -file gives the country name
+#' @return A data frame with all stations and all years data
+#' @export
 noaaGetCountry<-function(usecountry="FI",years=2008:2013,sitesdata=sites,force=FALSE,thisy=TRUE,basepath=NULL,uplag=0,
                          countrycode=c("country","NUTS","NUTS0i","NUTS3i")) {
   ## todo (xx.05.2013): error checking for missing sitesdata

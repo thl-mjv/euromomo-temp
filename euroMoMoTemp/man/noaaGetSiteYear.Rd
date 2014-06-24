@@ -19,6 +19,9 @@ noaaGetSiteYear(site, year = 2013, force = FALSE, thisy = TRUE,
 
 \item{basepath}{where the cached files should go}
 }
+\value{
+a dataframe with single years data from a single station
+}
 \description{
 The NOAA site has each station's data separated into files. These files are further split into years with one directory for each year.
 The data is downloaded, read in and transformed to use metric measurement units
