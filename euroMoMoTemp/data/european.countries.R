@@ -1,0 +1,4 @@
+european.countries<-c("AT", "BE", "BG", "CH", "CY", "CZ", "DE", "DK", "EE", "EL", 
+                      "ES", "FI", "FR", "HR", "HU", "IE", "IS", "IT", "LI", "LT", "LU", 
+                      "LV", "ME", "MK", "MT", "NL", "NO", "PL", "PT", "RO", "SE", "SI", 
+                      "SK", "TR", "UK")

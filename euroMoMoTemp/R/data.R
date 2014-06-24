@@ -1,15 +1,11 @@
-###
-### Routines for importing data from the NOAA site
-### ftp://ftp.ncdc.noaa.gov/pub/data/gsod/
-### Data description: ftp://ftp.ncdc.noaa.gov/pub/data/gsod/GSOD_DESC.txt
-### Lists of sites  : ftp://ftp.ncdc.noaa.gov/pub/data/gsod/ish-history.csv
-###
-###
-### TODO: need to move these to rdata somehow
-european.countries<-c("AT", "BE", "BG", "CH", "CY", "CZ", "DE", "DK", "EE", "EL", 
-                      "ES", "FI", "FR", "HR", "HU", "IE", "IS", "IT", "LI", "LT", "LU", 
-                      "LV", "ME", "MK", "MT", "NL", "NO", "PL", "PT", "RO", "SE", "SI", 
-                      "SK", "TR", "UK")
+#' @name european.countries
+#' @title List of European countries
+#' @description List of countries in Europe, including EU and other countries for which NUTS is defined
+#'
+#' @docType data
+#' @keywords data
+NULL
+
 #' Load defaults for parameters
 #'
 #' Loads various defaults files and stores them globally. Simplifies the code as all country specific issues can be resolved in these files.
