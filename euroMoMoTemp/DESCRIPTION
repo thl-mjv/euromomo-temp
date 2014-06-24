@@ -1,0 +1,13 @@
+Package: euroMoMoTemp
+Type: Package
+Title: Tools for accessing and managing temperature data for the EuroMoMo
+    project
+Version: 1.0
+Date: 2014-06-24
+Author: Mikko J Virtanen, Ajay Oza
+Maintainer: Mikko J Virtanen <mikko.virtanen@thl.fi>
+Description: 
+License: GPL 2.0
+LazyLoad: yes
+Suggests:
+    timeDate
