@@ -8,15 +8,23 @@ NULL
 
 #' Load defaults for parameters
 #'
-#' Loads various defaults files and stores them globally. Simplifies the code as all country specific issues can be resolved in these files.
-#' All files with pattern defaults-*.dat will be used in alphapetical order. Thus the latter files override the former. So, using
-#' defaults-global.dat and defaults-local.dat the latter will override the former. Also, you can use either .dat or .txt so that .txt overrides .dat
+#' Loads various defaults files and stores them globally. 
+#' Simplifies the code as all country specific issues can be resolved in these files.
+#' All files with pattern defaults-*.dat will be used in alphapetical order. 
+#' Thus the latter files override the former. So, using defaults-global.dat and 
+#' defaults-local.dat the latter will override the former. 
+#' Also, you can use either .dat or .txt so that .txt overrides .dat
+#'
+#' There is also a default default in the package. It just states that the source files should 
+#' be downloaded to a subdirectory "download" in the current directory
 #'
 #'@export
 loadDefaults<-function() {
+  files0<-system.file("extdata","defaults.txt",package="euroMoMoTemp")
   files1<-list.files(patt="^defaults-.*[.]dat$")
   files2<-list.files(patt="^defaults-.*[.]txt$")
-  dats<-unlist(sapply(c(sort(files1),sort(files2)),readLines))
+  if(length(files1)+length(files2)==0) warning("No defaults files found, using package defaults")
+  dats<-unlist(sapply(c(files0,sort(files1),sort(files2)),readLines))
   dats<-dats[!grepl("^#",dats)] # remove comments
   splits<-strsplit(dats,"=")
   labels<-sapply(splits,function(a) strsplit(a[1],"[.]")[[1]])
@@ -55,21 +63,47 @@ noaaGetSites<-function(force=FALSE) {
     sites$lat  <-with(sites,ifelse(lat == -99999,NA,lat ))
     sites$lon  <-with(sites,ifelse(lon ==-999999,NA,lon ))
     sites$elev <-with(sites,ifelse(elev== -99999,NA,elev))
-    sitetrans<-read.table("download/noaa-countries.dat",sep=",",header=TRUE)
+    sitetrans<-read.table(system.file("exdata","noaa-countries.dat",package="euroMoMoTemp"),sep=",",header=TRUE)
     sites$NUTS        <-sitetrans$NUTS   [match(sites$country,sitetrans$NOAA)]
     sites$country.name<-sitetrans$Country[match(sites$country,sitetrans$NOAA)]
-    #european.countries<-sort(unique(as.character(subset(sites,!is.na(NUTS))$country))) # this is not useful!
     sites$Europe<-sites$country%in%european.countries
-    sites$EuropeProper<-with(sites,(-28000<lon) & (lon<35000) & (33000<lat) & (lat<73000)) # this is!
-    warning("This sites file does not include proper NUTS region information. Run explore-maps.R")
+    sites$EuropeProper<-with(sites,(-28000<lon) & (lon<35000) & (33000<lat) & (lat<73000)) 
+    warning("This sites file does not include proper NUTS region information.")
   } else {
-    sites<-read.table("download/sites.dat")
+    sites<-read.table("download/sites.dat") # FIXME: use default location for the cache
     sites$begin<-as.Date(as.character(sites$begin),"%Y-%m-%d")
     sites$end  <-as.Date(as.character(sites$end  ),"%Y-%m-%d")
   }
   sites
 }
 
+#' Download map data from EuroStat
+#' 
+#' Downloads NUTS regions from EuroStat website at \url{http://epp.eurostat.ec.europa.eu/cache/GISCO/geodatafiles/NUTS_2010_03M.zip}
+#' @param year The year of NUTS regions (Use with caution)
+#' @param resolution The resolution of the shapefile (use with caution)
+#' @param force Should the file be downloaded even if it already exists
+#' @param basepath The directory where the files should be downloaded 
+#' @value None
+#' @export
+getEuroMap<-function(year="2010",resolution="03M",force=FALSE,basepath=NULL) {
+  file<-paste("NUTS_",year,"_",resolution,"_SH.zip",sep="")
+  url <-paste("http://epp.eurostat.ec.europa.eu/cache/GISCO/geodatafiles/",file,sep="")
+  if(is.null(basepath)) basepath<-getOption("tempmomo")$all$cache$dir
+  down<-file.path(basepath,file)
+  if(!file.exists(down) | force) {
+    err<-try(download.file(url,down))
+    if(inherits(err,"try-err"))
+      stop("could not download file")
+  }
+  ## this is not windows compatible
+  system(paste("cd ",basepath," && unzip ",file,sep=""))
+  files<-list.files(path=file.path(basepath,paste("NUTS_",year,"_",resolution,"_SH",sep=""),"Data"),patt="NUTS_RG_*",full=TRUE)
+  comms<-paste("mv ",files," ",basepath,sep="")
+  sapply(comms,system)
+  system(paste("cd ",basepath," && rm -rf ",file," NUTS_",year,"_",resolution,"_SH",sep=""))
+  invisible(NULL)
+}
 #' Match sites to map areas
 #'
 #' @param sites data frame with lat&lon
@@ -78,10 +112,13 @@ noaaGetSites<-function(force=FALSE) {
 #' @param type  What kind of match should be returned
 #' @return A matched label of the region
 #' @export
-noaaMapRegions<-function(sites,map,level=0,type=c("inarea","distance","bestquess")) {
+noaaMapRegions<-function(sites,map=NULL,level=0,type=c("inarea","distance","bestquess")) {
   require("sp")
   require("maptools")
   require("fields")
+  if(is.null(map)) { # default file
+    
+  }
   sp<-SpatialPolygons(subset(map,STAT_LEVL_==level)@polygons)
   pcents<-coordinates(sp)
   sites$row<-1:nrow(sites)
@@ -132,8 +169,8 @@ noaaMapRegions<-function(sites,map,level=0,type=c("inarea","distance","bestquess
 noaaGetSiteYear<-function(site,year=2013,force=FALSE,thisy=TRUE,uplag=0,basepath=NULL) {
   file<-paste(site,"-99999-",year,".op.gz",sep="")
   url <-paste("ftp://ftp.ncdc.noaa.gov/pub/data/gsod/",year,"/",file,sep="")
-  if(is.null(basepath)) basepath<-"."
-  down<-paste(basepath,"/download/",file,sep="")
+  if(is.null(basepath)) basepath<-getOption("tempmomo")$all$cache$dir
+  down<-paste(basepath,file,sep="/")
   if(file.exists(down)) {
     lastupd<-as.Date(file.info(down)$mtime)
     updsinc<-min(as.numeric(Sys.Date()-lastupd))
@@ -222,6 +259,6 @@ noaaGetCountry<-function(usecountry="FI",years=2008:2013,sitesdata=sites,force=F
     res[[i]]<-do.call("rbind",yres)
   }
   out<-do.call("rbind",res)
-  attr(out,"downloaded")<-Sys.Date() # collect the date of last update. Should use max from yres?
+  attr(out,"downloaded")<-with(out,max(date)) # collect the date of last update. Should use max from yres?
   out
 }

@@ -1,4 +1,4 @@
 ####
 #### no content
-all.cache.dir=.
+all.cache.dir=Download
 ###

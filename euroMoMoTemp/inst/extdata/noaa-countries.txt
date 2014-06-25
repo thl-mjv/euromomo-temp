@@ -1,0 +1,34 @@
+NUTS,NOAA,Country
+CH,SW,Switzerland
+NO,NO,Norway
+SE,SN,Sweden
+FI,FI,Finland
+UK,UK,United Kingdom
+IE,IE,Ireland
+IS,IL,Iceland
+DK,DN,Denmark
+NL,NL,Netherlands
+BE,BX,Belgium
+LI,LT,Liechtenstein
+FR,FR,France
+PT,PO,Portugal
+ES,SP,Spain
+DE,DD,Germany
+DE,DL,Germany
+AT,OS,Austria
+CZ,CZ,Czech Republic
+RO,RO,Romania
+SK,EZ,Slovakia
+PL,PL,Poland
+HU,HU,Hungary
+SI,LJ,Slovenia
+HR,RH,Croatia
+MK,YG,Macedonia
+BG,BU,Bulgaria
+IT,IY,Italy
+MT,ML,Malta
+TR,TU,Turkey
+CY,CY,Cyprus
+EE,EN,Estonia
+LV,LA,Latvia
+LT,LH,Lithuania
