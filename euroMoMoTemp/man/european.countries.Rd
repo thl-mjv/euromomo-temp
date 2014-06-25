@@ -2,9 +2,9 @@
 \docType{data}
 \name{european.countries}
 \alias{european.countries}
-\title{european.countries}
+\title{List of European countries}
 \description{
-List of European countries
+List of countries in Europe, including EU and other countries for which NUTS is defined
 }
 \keyword{data}
 

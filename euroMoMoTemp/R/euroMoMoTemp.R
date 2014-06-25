@@ -8,4 +8,5 @@
 #' Data description: \URL{ftp://ftp.ncdc.noaa.gov/pub/data/gsod/GSOD_DESC.txt}
 #' Lists of sites  : \URL{ftp://ftp.ncdc.noaa.gov/pub/data/gsod/ish-history.csv}
 #' @rdname euroMoMoTemp
+#' @name euroMoMoTemp
 {}

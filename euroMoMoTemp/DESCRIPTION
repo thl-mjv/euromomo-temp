@@ -11,4 +11,6 @@ Description: Download weather data from public sources such as NOAA website and
 License: GPL 2.0
 LazyData: yes
 Suggests:
-    sp, maptools, fields
+    sp,
+    maptools,
+    fields
