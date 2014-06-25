@@ -63,7 +63,7 @@ noaaGetSites<-function(force=FALSE) {
     sites$lat  <-with(sites,ifelse(lat == -99999,NA,lat ))
     sites$lon  <-with(sites,ifelse(lon ==-999999,NA,lon ))
     sites$elev <-with(sites,ifelse(elev== -99999,NA,elev))
-    sitetrans<-read.table(system.file("exdata","noaa-countries.dat",package="euroMoMoTemp"),sep=",",header=TRUE)
+    sitetrans<-read.table(system.file("extdata","noaa-countries.txt",package="euroMoMoTemp"),sep=",",header=TRUE)
     sites$NUTS        <-sitetrans$NUTS   [match(sites$country,sitetrans$NOAA)]
     sites$country.name<-sitetrans$Country[match(sites$country,sitetrans$NOAA)]
     sites$Europe<-sites$country%in%european.countries
@@ -84,7 +84,7 @@ noaaGetSites<-function(force=FALSE) {
 #' @param resolution The resolution of the shapefile (use with caution)
 #' @param force Should the file be downloaded even if it already exists
 #' @param basepath The directory where the files should be downloaded 
-#' @value None
+#' @return None
 #' @export
 getEuroMap<-function(year="2010",resolution="03M",force=FALSE,basepath=NULL) {
   file<-paste("NUTS_",year,"_",resolution,"_SH.zip",sep="")
@@ -97,11 +97,11 @@ getEuroMap<-function(year="2010",resolution="03M",force=FALSE,basepath=NULL) {
       stop("could not download file")
   }
   ## this is not windows compatible
-  system(paste("cd ",basepath," && unzip ",file,sep=""))
-  files<-list.files(path=file.path(basepath,paste("NUTS_",year,"_",resolution,"_SH",sep=""),"Data"),patt="NUTS_RG_*",full=TRUE)
-  comms<-paste("mv ",files," ",basepath,sep="")
-  sapply(comms,system)
-  system(paste("cd ",basepath," && rm -rf ",file," NUTS_",year,"_",resolution,"_SH",sep=""))
+  unzip(down,exdir=basepath,overwrite=TRUE,junkpaths=TRUE)
+  #files<-list.files(path=file.path(basepath,paste("NUTS_",year,"_",resolution,"_SH",sep=""),"Data"),patt="NUTS_RG_*",full=TRUE)
+  #comms<-paste("mv ",files," ",basepath,sep="")
+  #sapply(comms,system)
+  #system(paste("cd ",basepath," && rm -rf ",file," NUTS_",year,"_",resolution,"_SH",sep=""))
   invisible(NULL)
 }
 #' Match sites to map areas
@@ -112,12 +112,12 @@ getEuroMap<-function(year="2010",resolution="03M",force=FALSE,basepath=NULL) {
 #' @param type  What kind of match should be returned
 #' @return A matched label of the region
 #' @export
-noaaMapRegions<-function(sites,map=NULL,level=0,type=c("inarea","distance","bestquess")) {
+noaaMapRegions<-function(sites,map=NULL,level=0,type=c("inarea","distance","bestguess")) {
   require("sp")
   require("maptools")
   require("fields")
   if(is.null(map)) { # default file
-    
+    map <- readShapeSpatial(file.path(getOption("tempfile")$all$cache$dir,"NUTS_RG_03M_2010.shp"))
   }
   sp<-SpatialPolygons(subset(map,STAT_LEVL_==level)@polygons)
   pcents<-coordinates(sp)

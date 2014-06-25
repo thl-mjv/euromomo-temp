@@ -3,7 +3,7 @@
 \alias{euroMoMoTemp}
 \title{A package to download weather data from various sources}
 \description{
-Main use is to provide weather data to the EuroMoMo project \URL{www.euromomo.eu}
+Main use is to provide weather data to the EuroMoMo project \url{www.euromomo.eu}
 }
 \details{
 Documentation for importing data from the NOAA site

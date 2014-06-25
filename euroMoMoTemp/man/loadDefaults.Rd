@@ -6,8 +6,15 @@
 loadDefaults()
 }
 \description{
-Loads various defaults files and stores them globally. Simplifies the code as all country specific issues can be resolved in these files.
-All files with pattern defaults-*.dat will be used in alphapetical order. Thus the latter files override the former. So, using
-defaults-global.dat and defaults-local.dat the latter will override the former. Also, you can use either .dat or .txt so that .txt overrides .dat
+Loads various defaults files and stores them globally.
+Simplifies the code as all country specific issues can be resolved in these files.
+All files with pattern defaults-*.dat will be used in alphapetical order.
+Thus the latter files override the former. So, using defaults-global.dat and
+defaults-local.dat the latter will override the former.
+Also, you can use either .dat or .txt so that .txt overrides .dat
+}
+\details{
+There is also a default default in the package. It just states that the source files should
+be downloaded to a subdirectory "download" in the current directory
 }
 

@@ -3,8 +3,8 @@
 \alias{noaaMapRegions}
 \title{Match sites to map areas}
 \usage{
-noaaMapRegions(sites, map, level = 0, type = c("inarea", "distance",
-  "bestquess"))
+noaaMapRegions(sites, map = NULL, level = 0, type = c("inarea",
+  "distance", "bestguess"))
 }
 \arguments{
 \item{sites}{data frame with lat&lon}
