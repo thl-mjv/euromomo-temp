@@ -9,6 +9,6 @@ Maintainer: Mikko J Virtanen <mikko.virtanen@thl.fi>
 Description: Download weather data from public sources such as NOAA website and
     turn these into useable indicators for analysis
 License: GPL 2.0
-LazyLoad: yes
+LazyData: yes
 Suggests:
-    timeDate
+    sp, maptools, fields

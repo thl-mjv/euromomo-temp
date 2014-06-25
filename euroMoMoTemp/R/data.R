@@ -80,6 +80,8 @@ noaaGetSites<-function(force=FALSE) {
 #' @export
 noaaMapRegions<-function(sites,map,level=0,type=c("inarea","distance","bestquess")) {
   require("sp")
+  require("maptools")
+  require("fields")
   sp<-SpatialPolygons(subset(map,STAT_LEVL_==level)@polygons)
   pcents<-coordinates(sp)
   sites$row<-1:nrow(sites)
