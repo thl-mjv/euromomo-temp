@@ -74,6 +74,9 @@ noaaGetSites<-function(force=FALSE) {
     sites$begin<-as.Date(as.character(sites$begin),"%Y-%m-%d")
     sites$end  <-as.Date(as.character(sites$end  ),"%Y-%m-%d")
   }
+  ## TODO: need to add saving the file to above place
+  ## TODO: fix nuts areas etc
+  
   sites
 }
 
@@ -117,7 +120,7 @@ noaaMapRegions<-function(sites,map=NULL,level=0,type=c("inarea","distance","best
   require("maptools")
   require("fields")
   if(is.null(map)) { # default file
-    map <- readShapeSpatial(file.path(getOption("tempfile")$all$cache$dir,"NUTS_RG_03M_2010.shp"))
+    map <- readShapeSpatial(file.path(getOption("tempmomo")$all$cache$dir,"NUTS_RG_03M_2010.shp"))
   }
   sp<-SpatialPolygons(subset(map,STAT_LEVL_==level)@polygons)
   pcents<-coordinates(sp)
@@ -132,7 +135,7 @@ noaaMapRegions<-function(sites,map=NULL,level=0,type=c("inarea","distance","best
   dists <- rdist(pcents,csites@coords)
   dists.min <- apply(dists, 2, which.min)
   
-  x.data.country <- subset(x,STAT_LEVL_==level)@data
+  x.data.country <- subset(map,STAT_LEVL_==level)@data
   
   inarea<-as.character(x.data.country[e.st,2]) # site residing within the area
   distan<-as.character(x.data.country$NUTS_ID[dists.min]) # by minimun dist
